@@ -6,6 +6,7 @@ import { source } from '@/lib/source';
 import { appName } from '@/lib/shared';
 import type { Folder } from 'fumadocs-core/page-tree';
 import { useEffect, useState } from 'react';
+import { DocDiffPreview } from '@/components/doc-diff';
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,6 +21,7 @@ function isFolder(node: { type: string }): node is Folder {
 
 interface RecentEntry {
   url: string;
+  path: string;
   title: string;
   date: Date;
 }
@@ -37,7 +39,7 @@ function useRecentlyUpdated(limit = 5): { entries: RecentEntry[]; loading: boole
         const loaded = await page.data.load();
         const lastModified = (loaded as { lastModified?: Date | string }).lastModified;
         const date = lastModified ? new Date(lastModified) : null;
-        return { url: page.url, title: page.data.title, date };
+        return { url: page.url, path: page.path, title: page.data.title, date };
       }),
     ).then((results) => {
       if (cancelled) return;
@@ -105,14 +107,16 @@ export default function Home() {
               <>
                 {recent.map((entry) => (
                   <li key={entry.url}>
-                    <Link
-                      to={entry.url}
-                      className="flex items-center justify-between gap-4 p-3 text-sm transition-colors hover:bg-fd-accent"
-                    >
-                      <span>{entry.title}</span>
-                      <span className="shrink-0 text-fd-muted-foreground">
-                        {entry.date.toLocaleDateString('sv-SE')}
-                      </span>
+                    <Link to={`${entry.url}#andringar`} className="block p-3 transition-colors hover:bg-fd-accent">
+                      <div className="flex items-center justify-between gap-4 text-sm">
+                        <span>{entry.title}</span>
+                        <span className="shrink-0 text-fd-muted-foreground">
+                          {entry.date.toLocaleDateString('sv-SE')}
+                        </span>
+                      </div>
+                      <div className="mt-2">
+                        <DocDiffPreview path={entry.path} />
+                      </div>
                     </Link>
                   </li>
                 ))}

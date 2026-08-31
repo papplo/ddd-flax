@@ -14,6 +14,7 @@ import { gitConfig } from '@/lib/shared';
 import { useFumadocsLoader } from 'fumadocs-core/source/client';
 import { useMDXComponents } from '@/components/mdx';
 import { DocumentScopeProvider } from '@/document-runtime/document-scope';
+import { DocChangelog } from '@/components/doc-diff';
 import { use } from 'react';
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -54,6 +55,7 @@ function Content({ path, markdownUrl }: { path: string; markdownUrl: string }) {
           <Mdx components={useMDXComponents()} />
         </DocumentScopeProvider>
       </DocsBody>
+      <DocChangelog path={path} />
     </DocsPage>
   );
 }
