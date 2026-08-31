@@ -1,0 +1,36 @@
+---
+title: Teknisk last & tolerans
+description: Beräknad last mot deklarerad tolerans, per timme
+---
+
+Det här dokumentet visar beräknad teknisk last (`load`) och dess toleransgräns (`tolerance`) per timme (mtu), för en vald epok eller ett tidsspann. Måttet beräknas per `mtu` inom varje epok (`edd`) och jämförs mot en deklarerad toleransnivå — värden nära eller över toleransen flaggas som en avvikelse värd att följa upp.
+
+Ingen särskild matematisk notation krävs här (se REQUIREMENTS.md §7) — beräkningen beskrivs i löptext snarare än formellt.
+
+## Datakontrakt
+
+Det här dokumentet förväntar sig tidsseriedata från IGM `igm-7` med egenskaperna `load` och `tolerance`, i formen `{ edd, mtu, [prop]: number }` (se ordlistan i REQUIREMENTS.md §6). Den faktiska datakällan är inte kopplad ännu — nedan visas mockdata.
+
+## Tidsspann
+
+<DateRangeBlock min="2026-06-01" max="2026-08-28" />
+
+## Last över tid
+
+<ChartBlock igm="igm-7" prop="load" label="Teknisk last (igm-7)" />
+
+## Toleransnivå över tid
+
+<ChartBlock igm="igm-7" prop="tolerance" label="Tolerans (igm-7)" />
+
+## Senaste mätpunkter
+
+<TableBlock igm="igm-7" prop="load" label="Last, senaste punkter" limit={24} />
+
+<InsightBlock title="Att notera">
+  Lasten följer ett tydligt dygnsmönster med topp under dagtid. Ingen punkt i det valda intervallet överskrider toleransnivån.
+</InsightBlock>
+
+<WarningBlock title="Mockdata">
+  Värdena ovan är genererade mockdata (se `app/data/sources/mock-igm.ts`) — den riktiga datakopplingen mot IGM-källor är inte gjord än.
+</WarningBlock>
